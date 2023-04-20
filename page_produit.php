@@ -49,6 +49,7 @@ if (isset($_GET['pdt'])) {
         </ul>
 
         <div class="h-icons">
+        <div><a href="panier.php"><span class="num" id="badge">0</span></a></div>
             <a href="panier.php"><i class='bx bx-shopping-bag'></i></a>
             <a href="#"><i class='bx bxs-heart'></i></a>
             <div class="action3">
@@ -133,10 +134,11 @@ if (isset($_GET['pdt'])) {
 
                 <div class="purchase2-info">
                     <input type="number" min="0" value="1">
-                    <button type="button" class="btn">
-                        <a href="panier.php?pdt=<?= $produit->id ?>">Ajouter au panier <i class="fas fa-shopping-cart"></i></a>
-                    </button>
+                    <div class="bbtn">
+                        <a data-id="<?php echo $produit->id; ?>">Ajouter au panier<i class="fas fa-shopping-cart"></i></a>
+                    </div>
                 </div>
+                
 
                 <div class="social2-links">
                     <p>Partager sur: </p> <br>
@@ -156,7 +158,7 @@ if (isset($_GET['pdt'])) {
                         <i class="fab fa-pinterest"></i>
                     </a>
                 </div>
-        <?php }
+        <?php } 
                 } ?>
             </div>
         </div>
@@ -239,6 +241,26 @@ if (isset($_GET['pdt'])) {
         function menuToggle() {
             const toggleMenu = document.querySelector('.menu3');
             toggleMenu.classList.toggle('active')
+        }
+    </script>
+    <!--pour éviter de recharger la page-->
+    <script>
+        var product_id = document.getElementsByClassName("bbtn");
+        for (var i = 0; i < product_id.length; i++) {
+            product_id[i].addEventListener("click", function(event) {
+                var target = event.target;
+                var id = target.getAttribute("data-id");
+                var xml = new XMLHttpRequest();
+                xml.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var data = JSON.parse(this.responseText);
+                        target.innerHTML = data.in_cart;
+                        document.getElementById("badge").innerHTML = data.num_cart + 1;
+                    }
+                }
+                xml.open("GET", "con_panier.php?id=" + id, true)
+                xml.send();
+            })
         }
     </script>
 </body>

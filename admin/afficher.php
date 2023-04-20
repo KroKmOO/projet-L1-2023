@@ -105,7 +105,7 @@ foreach ($_SESSION['xRttpHo0greL39'] as $i) {
 				<span class="num">8</span>
 			</a>
 			<a href="#" class="profile">
-				<img src="../ressources/image_2023-03-04_114640565-removebg-preview.png">
+				<img src="../ressources/imgicon.jpg">
 			</a>
 		</nav>
 		<!-- NAVBAR -->

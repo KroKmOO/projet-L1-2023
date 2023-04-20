@@ -195,9 +195,9 @@ foreach ($_SESSION['xRttpHo0greL39'] as $i) {
 
                                 <div class="purchase2-info">
                                     <input type="number" min="0" value="1">
-                                    <button type="button" class="btn">
-                                        <a href="panier.php?pdt=<?= $produit->id ?>">Ajouter au panier <i class="fas fa-shopping-cart"></i></a>
-                                    </button>
+                                    <div class="btn">
+                                        <a >Ajouter au panier <i class="fas fa-shopping-cart"></i></a>
+                                    </div>
                                 </div>
 
                                 <div class="social2-links">

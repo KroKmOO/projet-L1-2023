@@ -34,7 +34,8 @@
         </ul>
 
         <div class="h-icons">
-            <a href="#"><i class='bx bx-shopping-bag'></i></a>
+        <div><a href="panier.php"><span class="num" id="badge">0</span></a></div>
+            <a href="panier.php"><i class='bx bx-shopping-bag'></i></a>
             <a href="#"><i class='bx bxs-heart'></i></a>
             <div class="action3">
                 <div class="profile3" onclick="menuToggle();">
