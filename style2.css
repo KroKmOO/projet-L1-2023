@@ -949,10 +949,6 @@ span2 {
 		flex-direction: column;
 	}
 
-	.profiles .profile-img {
-		width: 70%;
-		height: 70%;
-	}
 
 	.profile {
 		display: flex;
@@ -987,6 +983,13 @@ span2 {
 	}
 }
 
+@media (max-width: 600px) {
+	.profiles .profile-img {
+		width: calc(400px - 200px);
+		height: calc(400px - 200px);
+	}
+}
+
 /*slider*/
 
 .mySlides {
@@ -1001,7 +1004,7 @@ img {
 }
 
 .slideshow-container {
-	max-width: 60%;
+	max-width: 90%;
 	object-fit: cover;
 	position: relative;
 	margin: auto;
@@ -1132,7 +1135,7 @@ img {
 .connexion {
 	height: 100vh;
 	width: 100%;
-	background-image: url(ressources/backv2.2.jpg);
+	background-image: url(ressources/imgcon.jpg);
 	background-size: cover;
 	background-position: center;
 	display: flex;
@@ -1145,7 +1148,7 @@ img {
 	width: 100%;
 	max-width: 470px;
 	padding: 30px 20px;
-	background: rgba(255, 255, 255, 0.733);
+	background: rgba(198, 197, 197, 0.733);
 	border-radius: 5%;
 }
 
@@ -1266,7 +1269,7 @@ input[type="submit"]:hover {
 	justify-content: center;
 	height: 100vh;
 	width: 100%;
-	background: url(ressources/backv2.2.jpg);
+	background: url(ressources/imgcon.jpg);
 	background-size: cover;
 	background-position: center;
 	padding: 30px;
@@ -1277,7 +1280,7 @@ span .text-ins {
 }
 
 .main-ins {
-	background: rgba(255, 255, 255, 0.733);
+	background: rgba(198, 197, 197, 0.733);
 	;
 	width: 100%;
 	max-width: 800px;
@@ -1454,11 +1457,13 @@ form .btn-ins input:hover {
 .search {
 	margin-top: 50px;
 	display: flex;
+	justify-content: center;
 	align-items: center;
 }
 
 .search input {
-	width: 300px;
+	align-items: center;
+	width: 700px;
 	border: 2px solid black;
 	padding: 10px;
 	border-radius: 30px;
@@ -1613,8 +1618,7 @@ img {
 	margin: 1.5rem 0;
 }
 
-.purchase2-info input,
-.purchase2-info .btn {
+.purchase2-info input {
 	border: 1.5px solid #ddd;
 	border-radius: 25px;
 	text-align: center;
@@ -1628,21 +1632,21 @@ img {
 	width: 60px;
 }
 
-.purchase2-info .btn {
+.purchase2-info .bbtn {
+	padding: 20px 35px;
+	background: var(--main-color);
+	color: var(--bg-color);
+	font-size: 14px;
+	font-weight: 500;
+	text-align: center;
+	text-transform: uppercase;
+	border-radius: 30px;
+	transition: all .50s ease;
 	cursor: pointer;
-	color: #fff;
 }
 
-.purchase2-info .btn:first-of-type {
-	background: var(--main-color);
-}
-
-.purchase2-info .btn:last-of-type {
-	background: var(--main-color);
-}
-
-.purchase2-info .btn:hover {
-	opacity: 0.9;
+.purchase2-info .bbtn:hover {
+	background: var(--2nd-color);
 }
 
 .social2-links {
@@ -1933,6 +1937,21 @@ form textarea {
 }
 
 /*panier */
+.card32 {
+	margin-top: 5px;
+	width: auto;
+	padding: 20px 35px;
+	grid-template-columns: auto;
+	border-radius: 15%;
+	position: relative;
+	overflow: hidden;
+	text-align: center;
+}
+.card32 h5 {
+	color: var(--other-color);
+	font-size: 23px;
+	margin-bottom: 15px;
+}
 .title2 h2 {
 	text-align: center;
 	font-family: 'Leckerli One', cursive;
@@ -1943,7 +1962,7 @@ form textarea {
 }
 
 .cart-page {
-	margin: 80px auto;
+	
 	margin-left: 75px;
 	margin-right: 75px;
 }
@@ -1978,13 +1997,14 @@ td input {
 
 td a {
 	color: var(--main-color);
-	font-size: 12px;
+	font-size: 35px;
 }
 
 td img {
-	width: 80px;
-	height: 80px;
+	width: 120px;
 	margin-right: 10px;
+	margin-left: 20px;
+	border-radius: 25%;
 	object-fit: cover;
 }
 
@@ -2034,6 +2054,27 @@ th:last-child {
 @media (max-width: 600px) {
 	.cart-info p {
 		display: none;
+	}
+
+	td {
+		width: auto;
+	}
+
+	.card-page {
+		margin: auto;
+		margin-left: 15px;
+		margin-right: 15px;
+	}
+
+	td img {
+		width: calc(120px - 70px);
+
+	}
+
+	th {
+		text-align: center;
+		padding: auto;
+
 	}
 }
 
@@ -2190,4 +2231,35 @@ th:last-child {
 		top: calc(120px + 3.3vw);
 		;
 	}
+}
+/*notification du panier*/
+.num{
+	z-index: 1;
+
+	position: absolute;
+	width: 20px;
+	height: 20px;
+	border-radius: 50%;
+	border: 2px solid var(--bg-color);
+	background: var(--main-color);
+	color: var(--bg-color);
+	font-weight: 700;
+	font-size: 12px;
+	display: flex;
+	padding: 0;
+	justify-content: center;
+	align-items: center;
+}
+/*barre dans le catalogue*/
+.h{
+	width: 80%;
+	height: 7px;
+	border: 0 none;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 50px;
+	margin-bottom: 50px;
+	border-radius: 5px;
+	background-color: var(--2nd-color);
+	opacity: 0.75;
 }

@@ -1,14 +1,16 @@
-<?php 
-   session_start();
-   include_once "con_panier.php";
+<?php
+session_start();
+include_once "con_panier.php";
 
-   //supprimer les produits
-   //si la variable del existe
-   if(isset($_GET['del'])){
-    $id_del = $_GET['del'] ;
+
+//supprimer les produits
+//si la variable del existe
+if (isset($_GET['del'])) {
+    $id_del = $_GET['del'];
     //suppression
     unset($_SESSION['panier'][$id_del]);
-   }
+    $con->query("DELETE FROM cart WHERE product_id = $id_del");
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -28,6 +30,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Leckerli+One&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/3aad46f9f1.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
@@ -45,9 +48,25 @@
         </ul>
 
         <div class="h-icons">
+        <div><a href="panier.php"><span class="num" id="badge">0</span></a></div>
             <a href="panier.php"><i class='bx bx-shopping-bag'></i></a>
             <a href="#"><i class='bx bxs-heart'></i></a>
-            <a href="connexion2.php"><i class='bx bxs-user'></i></a>
+            <div class="action3">
+                <div class="profile3" onclick="menuToggle();">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="menu3">
+                    <h3>Voici votre <br><span>Compte Utilisateur</span></h3>
+                    <ul>
+                        <li><a href="connexion2.php"><i class='bx bx-user-circle'></i>Connexion</a></li>
+                        <li><a href="#"><i class='bx bxs-edit'></i>Modifier</a></li>
+                        <li><a href="#"><i class='bx bx-envelope'></i>Boîte Mail</a></li>
+                        <li><a href="#"><i class='bx bx-cog'></i>Réglage</a></li>
+                        <li><a href="#"><i class='bx bx-help-circle'></i>Aide</a></li>
+                        <li><a href="admin/destroy.php"><i class='bx bx-log-out-circle'></i>Deconnexion</a></li>
+                    </ul>
+                </div>
+            </div>
             <div class="bx bx-menu" id="menu-icon"></div>
         </div>
     </header>
@@ -60,7 +79,7 @@
     <div class="small-container cart-page">
         <table>
             <tr>
-                <th></th>
+                <th>Image</th>
                 <th>Nom</th>
                 <th>Prix</th>
                 <th>Quantité</th>
@@ -74,9 +93,14 @@
                 $ids = array_keys($_SESSION['panier']);
                 //s'il n'y a aucune clé dans le tableau
                 if (empty($ids)) {
-                    echo "Votre panier est vide";
+                    ?><div class="card32">
+                        <h5>Votre panier est vide</h5>
+                    </div> <?php
                 } else {
                     //si oui 
+                    ?><div class="card32">
+                        <h5>Voici vos produits</h5>
+                    </div> <?php
                     $products = mysqli_query($con, "SELECT * FROM produits WHERE id IN (" . implode(',', $ids) . ")");
 
                     //lise des produit avec une boucle foreach
@@ -89,12 +113,13 @@
                 <td><img src="<?= $produits['image1'] ?>"></td>
                 <td><?= $produits['nom'] ?></td>
                 <td><?= $produits['prix'] ?>€</td>
-                <td><?= $_SESSION['panier'][$produits['id']] // Quantité
+                <td><?= $_SESSION['panier'][$produits['id']]; // Quantité
                     ?></td>
-                <td><a href="panier.php?del=<?= $produits['id'] ?>"><i class='bx bxs-trash'></i></a></td>
+                <td><a href="panier.php?del=<?= $produits['id'] ?>" class="remove"><i class='bx bxs-trash'></i></a></td>
             </tr>
 
-    <?php endforeach;} ?>
+    <?php endforeach;
+                } ?>
     </tr>
         </table>
     </div>
@@ -102,15 +127,15 @@
         <table>
             <tr>
                 <td>Sous-Total</td>
-                <td><?=$total?>€</td>
+                <td><?= $total ?>€</td>
             </tr>
             <tr>
                 <td>Taxes</td>
-                <td><?=$total*0.05?></td>
+                <td><?= $total * 0.2 ?></td>
             </tr>
             <tr>
                 <td>Total</td>
-                <td><?=$total + $total*0.05?>€</td>
+                <td><?= $total + $total * 0.2 ?>€</td>
             </tr>
         </table>
     </div>
@@ -164,6 +189,34 @@
 
     <!--liens javascipt-->
     <script src="script2.js"></script>
+    <!--pour déplier et replier le sous menu compte-->
+    <script>
+        function menuToggle() {
+            const toggleMenu = document.querySelector('.menu3');
+            toggleMenu.classList.toggle('active')
+        }
+    </script>
+    <!--pour éviter de recharger la page-->
+    <script>
+        var product_id = document.getElementsByClassName("bbtn");
+        for (var i = 0; i < product_id.length; i++) {
+            product_id[i].addEventListener("click", function(event) {
+                var target = event.target;
+                var id = target.getAttribute("data-id");
+                var xml = new XMLHttpRequest();
+                xml.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        var data = JSON.parse(this.responseText);
+                        target.innerHTML = data.in_cart;
+                        document.getElementById("badge").innerHTML = data.num_cart + 1;
+                    }
+                }
+                xml.open("GET", "con_panier.php?id=" + id, true)
+                xml.send();
+            })
+        }
+    </script>
+
 </body>
 
 </html>

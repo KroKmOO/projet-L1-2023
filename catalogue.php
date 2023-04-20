@@ -24,6 +24,7 @@ $Produits = afficher();
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Leckerli+One&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/3aad46f9f1.js" crossorigin="anonymous"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 </head>
 
 <body>
@@ -40,7 +41,10 @@ $Produits = afficher();
       <li><a href="contact.php">Contact</a></li>
     </ul>
 
+
+
     <div class="h-icons">
+      <div><a href="panier.php"><span class="num" id="badge">0</span></a></div>
       <a href="panier.php"><i class='bx bx-shopping-bag'></i></a>
       <a href="#"><i class='bx bxs-heart'></i></a>
       <div class="action3">
@@ -64,9 +68,13 @@ $Produits = afficher();
   </header>
 
   <!--Liste des produits-->
+  <div class="services2">
+    <div class="title2">
+      <h2>Nos Produits</h2>
+    </div>
+  </div>
   <section class="nouveaux produits">
-    <div class="center-text-catalogue">
-      <h2>Nos produits</h2>
+    <div class="center-text-catalogue" style="text-align: center;">
       <p> <big> Choissisez parmis une large gamme de <br>
           rosier, arbre fruité et de plantes ornementales.</big>
       </p>
@@ -74,9 +82,9 @@ $Produits = afficher();
 
     <!--Barre de recherche-->
     <div class="search">
-      <input type="text" name="" id="search-item" placeholder="recherche" onkeyup="search()">
+      <input type="text" class="form-control" id="live_search" autocomplete="off" placeholder="recherche...">
     </div>
-
+    <!--<hr class="h">-->
 
     <!--Produits-->
 
@@ -89,7 +97,7 @@ $Produits = afficher();
           </a>
           <h5><?= $produit->prix ?>€</h5>
           <div class="bbtn">
-            <a href="#">Ajouter au panier</a>
+            <a data-id="<?php echo $produit->id; ?>">Ajouter au panier</a>
           </div>
         </div>
       <?php endforeach; ?>
@@ -154,6 +162,50 @@ $Produits = afficher();
       const toggleMenu = document.querySelector('.menu3');
       toggleMenu.classList.toggle('active')
     }
+  </script>
+  <!--pour éviter de recharger la page-->
+  <script>
+    var product_id = document.getElementsByClassName("bbtn");
+    for (var i = 0; i < product_id.length; i++) {
+      product_id[i].addEventListener("click", function(event) {
+        var target = event.target;
+        var id = target.getAttribute("data-id");
+        var xml = new XMLHttpRequest();
+        xml.onreadystatechange = function() {
+          if (this.readyState == 4 && this.status == 200) {
+            var data = JSON.parse(this.responseText);
+            target.innerHTML = data.in_cart;
+            document.getElementById("badge").innerHTML = data.num_cart + 1;
+          }
+        }
+        xml.open("GET", "con_panier.php?id=" + id, true)
+        xml.send();
+      })
+    }
+  </script>
+  <!--pour la barre de recherche-->
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $("#live_search").keyup(function() {
+        var input = $(this).val();
+        //alert(input);
+
+        if (input != "") {
+          $.ajax({
+            url: "livesearch.php",
+            method: "POST",
+            data: {input: input},
+
+            success: function(data) {
+              $("#searchresult").html(data);
+              $("#searchresult").css("display", "block");
+            }
+          });
+        } else {
+          $("#searchresult").css("display", "none");
+        }
+      });
+    });
   </script>
 </body>
 

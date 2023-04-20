@@ -1,46 +1,50 @@
 <?php
 session_start();
-    include "config/commandes.php";
+include "config/commandes.php";
 
-    if(isset($_SESSION['userxXJppk45hPGu']))
-    {
-        if(!empty($_SESSION['userxXJppk45hPGu']))
-        {
-            header("Location: index.php");
-        }
+if (isset($_SESSION['userxXJppk45hPGu'])) {
+    if (!empty($_SESSION['userxXJppk45hPGu'])) {
+        header("Location: index.php");
     }
+}
 
-    if(isset($_POST['envoyer']))
-    {
-        if(!empty($_POST['email']) AND !empty($_POST['motdepasse']) AND !empty($_POST['nom']) AND !empty($_POST['prenom']))
-        {
-            if(($_POST['motdepasse'] == $_POST['motdepasse2'])){
-                $email = htmlspecialchars(strip_tags($_POST['email'])) ;
+if (isset($_POST['envoyer'])) {
+    if (!empty($_POST['email']) and !empty($_POST['motdepasse']) and !empty($_POST['nom']) and !empty($_POST['prenom'])) {
+        if (($_POST['motdepasse'] == $_POST['motdepasse2'])) {
+            $email = htmlspecialchars(strip_tags($_POST['email']));
             $motdepasse = htmlspecialchars(strip_tags($_POST['motdepasse']));
+            $motdepasse2 = htmlspecialchars(strip_tags($_POST['motdepasse2']));
             $nom = htmlspecialchars(strip_tags($_POST['nom']));
             $prenom = htmlspecialchars(strip_tags($_POST['prenom']));
             $num = ($_POST['num']);
             $genre = ($_POST['genre']);
 
-            $user = ajouterUser($nom, $prenom, $email, $motdepasse, $num, $genre);
-            
-
-            if($user){
-                // $_SESSION['userxXJppk45hPGu'] = $user;
+            if($motdepasse2 == $motdepasse){
+                $user = ajouterUser($nom, $prenom, $email, $motdepasse, $num, $genre);
+            }
+            else{
+                echo "<script>alert('la confirmation est différente du mot de passe rentré')</script>";
                 header('Location: Acceuil.php');
-            }else{
+            }
+
+
+            if ($user) {
+                // $_SESSION['userxXJppk45hPGu'] = $user;
+                echo "<script>alert('Votre compte a bien été créé')</script>";
+                header('Location: Acceuil.php');
+            } else {
                 echo "Compte non créer !";
             }
-            }else{
-                echo"Votre mot de passe est différent de votre confirmation";
-            }
+        } else {
+            echo "Votre mot de passe est différent de votre confirmation";
         }
-
     }
+}
 
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -50,8 +54,7 @@ session_start();
     <link rel="stylesheet" type="text/css" href="style2.css">
 
     <link rel="icon" href="ressources/image_2023-03-04_114640565-removebg-preview.png" type="image/x-icon">
-    <link rel="stylesheet" 
-    href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,13 +66,15 @@ session_start();
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
-     rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 </head>
+
 <body>
-    <a onclick="window.history.back()" class="scroll-back"><i class='bx bx-chevrons-left'><h3>Retour</h3></i></a>
-    
-    
+    <a onclick="window.history.back()" class="scroll-back"><i class='bx bx-chevrons-left'>
+            <h3>Retour</h3>
+        </i></a>
+
+
     <section class="body-ins">
         <section class="main-ins">
             <h1 class="titre-ins">Inscription</h1>
@@ -135,6 +140,7 @@ session_start();
                 </div>
             </form>
         </section>
-    </section>  
+    </section>
 </body>
+
 </html>

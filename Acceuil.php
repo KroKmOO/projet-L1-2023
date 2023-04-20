@@ -2,6 +2,8 @@
 session_start();
 require("config/commandes.php");
 
+include("con_panier.php");
+
 $Produits = afficher();
 
 ?>
@@ -41,6 +43,7 @@ $Produits = afficher();
     </ul>
 
     <div class="h-icons">
+    <div><a href="panier.php"><span class="num" id="badge">0</span></a></div>
       <a href="panier.php"><i class='bx bx-shopping-bag'></i></a>
       <a href="#"><i class='bx bxs-heart'></i></a>
       <div class="action3">
@@ -107,8 +110,8 @@ $Produits = afficher();
           <div class="top">
             <p>New</p>
           </div>
-          <div class="bbtn" name="<?= $produit->id ?>">
-            <p>Ajouter au panier</p>
+          <div class="bbtn">
+            <a  data-id="<?php echo $produit->id; ?>">Ajouter au panier</a> 
           </div>
         </div>
       <?php endforeach; ?>
@@ -266,56 +269,25 @@ $Produits = afficher();
       toggleMenu.classList.toggle('active')
     }
   </script>
+  <!--pour éviter de recharger la page-->
   <script>
-    $(document).ready(function() {
-      var inputs = document.querySelectorAll('.bbtn');
-      for (var i = 0; i < inputs.length; i++) {
-        console.log(inputs[i]);
-        // When the value of the input changes…
-        inputs[i].addEventListener('click', function(e) {
-
-          //let sejour = $('input[name=sejour]:checked').val();
-          let idproduit = this.getAttribute('name');
-          console.log(idproduit);
-
-          /*$.ajax({
-            url: 'rooming.php',
-            type: 'POST',
-            data: {
-              //sejour: sejour,
-              idproduit: idproduit
-            },
-            success: function(response) {
-
-              list = JSON.parse(response)
-
-              $(datalist).empty();
-
-              list.forEach(function(item) {
-
-                var option = document.createElement('option')
-
-                //<option data-value=</?php echo ($dataRoommate[0]) /?> data-libre="</?php echo ($dataRoommate[4]) /?>"></?php echo ($choix) /?></option>
-                option.setAttribute('data-value', item["idRoommate"])
-                option.setAttribute('data-libre', item["verifyRoommate"])
-                option.setAttribute('value', item["infos"])
-
-                document.getElementById(datalist.id).appendChild(option)
-              });
-
-            },
-            fail: function(xhr, status, error) {
-              console.log(status)
-              console.log("fail")
-            }
-          });*/
-
-
-
-        })
-      };
-
-    });
+    var product_id = document.getElementsByClassName("bbtn");
+    for(var i = 0; i <product_id.length; i++){
+      product_id[i].addEventListener("click", function(event){
+        var target = event.target;
+        var id = target.getAttribute("data-id");
+        var xml = new XMLHttpRequest();
+        xml.onreadystatechange = function(){
+          if(this.readyState == 4 && this.status == 200){
+            var data = JSON.parse(this.responseText);
+            target.innerHTML = data.in_cart;
+            document.getElementById("badge").innerHTML = data.num_cart + 1;
+          }
+        }
+        xml.open("GET","con_panier.php?id="+id,true)
+        xml.send();
+      })
+    }
   </script>
 </body>
 
